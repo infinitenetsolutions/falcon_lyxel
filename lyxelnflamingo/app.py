@@ -6,7 +6,5 @@ from .resource_list import ResourceList
 
 app = application = falcon.App()
 
-data = Resource()
-records = ResourceList()
-app.add_route('/api/insert', data)
-app.add_route('/api/graph', records)
+app.add_route('/api/insert', Resource())
+app.add_route('/api/graph', ResourceList())
