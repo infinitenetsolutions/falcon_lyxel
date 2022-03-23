@@ -9,7 +9,14 @@ class Resource:
         self.USERNAME = "altaf"
         self.PASSWORD = "toor"
         self.HOST = "127.0.0.1"
+        self.DB = "lyxelnflamingo"
+        self.TABLE = "resource"
         self.connection = None
+        
+    def __del__(self):
+        if self.connection is not None:
+            self.connection.close()
+            self.connection = None
 
     def on_get(self, req, resp):
         timestamp = req.get_param('timestamp')
@@ -30,7 +37,7 @@ class Resource:
                     password = self.PASSWORD 
                 )
             cursor = self.connection.cursor()
-            query = f"insert into lyxelnflamingo.resource values('{timestamp}',{value})"
+            query = f"insert into {self.DB}.{self.TABLE} values('{timestamp}',{value})"
             cursor.execute(query)
             self.connection.commit()
             resp.status = falcon.HTTP_200
