@@ -8,7 +8,7 @@ class Resource:
     def __init__(self):
         self.USERNAME = "altaf"
         self.PASSWORD = "toor"
-        self.HOST = "192.168.131.128"
+        self.HOST = "127.0.0.1"
         self.connection = None
 
     def on_get(self, req, resp):
@@ -18,7 +18,9 @@ class Resource:
             value = int(value)
             datetime.datetime.strptime(timestamp, r'%Y-%m-%d')
         except ValueError:
-            value = timestamp = None
+            timestamp = None
+        except TypeError:
+            value = None
 
         if timestamp and value:
             if self.connection is None:
@@ -31,4 +33,6 @@ class Resource:
             query = f"insert into lyxelnflamingo.resource values('{timestamp}',{value})"
             cursor.execute(query)
             self.connection.commit()
-        resp.status = falcon.HTTP_200
+            resp.status = falcon.HTTP_200
+        else:
+            resp.status = falcon.HTTP_400
